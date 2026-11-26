@@ -1,0 +1,55 @@
+---
+title: "Principles of Constitutional Law"
+subtitle: "Cases, Statutes, and Commentary"
+author: "Your Name"
+date: today
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-depth: 3
+    number-sections: true
+    embed-resources: true
+  pdf:
+    documentclass: scrreprt
+    papersize: letter
+    toc: true
+    number-sections: true
+    colorlinks: true
+  epub:
+    toc: true
+---
+
+# Preface {.unnumbered}
+
+Welcome to **Principles of Constitutional Law**. This text provides a structured overview of foundational legal doctrines, statutory frameworks, and landmark judicial decisions.
+
+---
+
+# Chapter 1: Jurisdiction and Standing
+
+## Constitutional Foundations
+
+To bring a claim before a court, a plaintiff must establish legal standing.^[See *Lujan v. Defenders of Wildlife*, 504 U.S. 555, 560–61 (1992) (establishing the three-part test for standing: injury in fact, causation, and redressability).] Without standing, a court lacks subject-matter jurisdiction to hear the dispute.
+
+::: {.callout-note title="Case Brief: Marbury v. Madison, 5 U.S. (1 Cranch) 137 (1803)"}
+**Facts:** William Marbury petitioned the Supreme Court for a writ of mandamus compelling Secretary of State James Madison to deliver his judicial commission.
+
+**Issue:** Does the Supreme Court have the authority to review acts of Congress and determine whether they are unconstitutional?
+
+**Holding:** Yes. It is emphatically the province and duty of the judicial department to say what the law is.
+:::
+
+## Statutory Interpretation
+
+When analyzing a statute, courts rely on established canons of construction:
+
+1. **Textualism:** Focuses on the ordinary public meaning of the legal text.
+2. **Purposivism:** Examines the broader legislative intent behind the statute.
+3. **Constitutional Avoidance:** Adopts a reasonable construction that avoids constitutional doubts.^[See *Ashwander v. Tennessee Valley Authority*, 297 U.S. 288, 348 (1936).]
+
+---
+
+# Chapter 2: Separation of Powers
+
+Start writing your next chapter right here. Just type `# Chapter 3: Title` whenever you want to start a new chapter!
