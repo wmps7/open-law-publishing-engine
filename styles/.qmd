@@ -1,0 +1,5 @@
+\begin{casebrief}{Donoghue v Stevenson AC 562}
+\textbf{Material Facts:} A manufacturer sold ginger beer in an opaque bottle containing a decomposed snail.
+
+\textbf{Ratio Decidendi:} A manufacturer owes a duty of care to the ultimate consumer when there is no reasonable possibility of intermediate examination.
+\end{casebrief}
