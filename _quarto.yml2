@@ -1,0 +1,16 @@
+project:
+  type: book
+  output-dir: _book
+
+book:
+  title: "Comprehensive Principles of Law" # Replace with your original title
+  subtitle: "A Structured Guide to Legal Doctrine and Case Analysis"
+  author: "Your Name"
+  date: "2026"
+  chapters:
+    - index.qmd
+    - front-matter/preface.qmd
+    - part: "Part I: General Principles"
+      chapters:
+        - part-1/ch01-foundations.qmd
+        - part-1/ch02-legal-reasoning.qmd
