@@ -1,0 +1,9 @@
+# Preface {.unnumbered}
+
+Welcome to **Principles of Constitutional Law**. This text is designed to provide students, practitioners, and researchers with a clear, structured overview of foundational legal doctrines, statutory frameworks, and landmark judicial decisions.
+
+## How to Use This Book {.unnumbered}
+
+* **Footnotes:** Legal citations appear as numbered footnotes throughout the text.
+* **Case Briefs:** Key judicial opinions are summarized in highlighted callout boxes.
+* **Updates:** This edition is continuously maintained and updated via GitHub.
