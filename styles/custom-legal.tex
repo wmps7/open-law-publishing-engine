@@ -1,0 +1,20 @@
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable}
+
+% Custom Case Brief Box
+\newtcolorbox{casebrief}[1]{
+  breakable,
+  colback=gray!5,
+  colframe=black!75,
+  fonttitle=\bfseries,
+  title=Case Brief: #1
+}
+
+% Custom Statutory Provision Box
+\newtcolorbox{statutebox}[1]{
+  breakable,
+  colback=blue!5,
+  colframe=blue!60!black,
+  fonttitle=\bfseries,
+  title=Statutory Provision: #1
+}
