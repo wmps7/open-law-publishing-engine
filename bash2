@@ -1,0 +1,188 @@
+#!/bin/bash
+
+mkdir -p lex-quarto/_extensions/lex-quarto lex-quarto/cli/lex_cli
+cd lex-quarto
+git init
+
+# 1. Extension YAML
+cat << 'EOF' > _extensions/lex-quarto/_extension.yml
+title: Lex-Quarto Legal Publishing Engine
+author: Your Name
+version: 0.1.0
+quarto-required: ">=1.4.0"
+contributes:
+  filters:
+    - lex-filter.lua
+  formats:
+    pdf:
+      include-in-header: legal-styles.tex
+EOF
+
+# 2. LaTeX Legal Styling
+cat << 'EOF' > _extensions/lex-quarto/legal-styles.tex
+\usepackage{tcolorbox}
+\tcbuselibrary{skins, breakable}
+
+\newtcolorbox{casebrief}{
+  breakable,
+  colback=gray!5,
+  colframe=black!75,
+  fonttitle=\bfseries,
+  title=Case Brief: #1
+}
+
+\newtcolorbox{statutebox}{
+  breakable,
+  colback=blue!5,
+  colframe=blue!60!black,
+  fonttitle=\bfseries,
+  title=Statutory Provision: #1
+}
+EOF
+
+# 3. Lua Filter for Cases & Statutes
+cat << 'EOF' > _extensions/lex-quarto/lex-filter.lua
+local cases = {}
+local statutes = {}
+
+function Span(el)
+  if el.classes:includes("case") then
+    local text = pandoc.utils.stringify(el)
+    table.insert(cases, text)
+    
+    local name, citation = text:match("^(.-)%s+(%[%d+%].*)$")
+    if not name then
+      name, citation = text:match("^(.-)%s+(%(%d+%).*)$")
+    end
+
+    if name and citation then
+      return {
+        pandoc.Emph({pandoc.Str(name)}),
+        pandoc.Space(),
+        pandoc.Str(citation)
+      }
+    else
+      return pandoc.Emph(el.content)
+    end
+  end
+
+  if el.classes:includes("statute") then
+    local text = pandoc.utils.stringify(el)
+    table.insert(statutes, text)
+    return el.content
+  end
+end
+
+function Pandoc(doc)
+  local file = io.open("_lex_authorities.json", "w")
+  if file then
+    file:write('{\n  "cases": [\n')
+    for i, c in ipairs(cases) do
+      file:write(string.format('    "%s"%s\n', c:gsub('"', '\\"'), i < #cases and "," or ""))
+    end
+    file:write('  ],\n  "statutes": [\n')
+    for i, s in ipairs(statutes) do
+      file:write(string.format('    "%s"%s\n', s:gsub('"', '\\"'), i < #statutes and "," or ""))
+    end
+    file:write('  ]\n}\n')
+    file:close()
+  end
+  return doc
+end
+EOF
+
+# 4. Template QMD
+cat << 'EOF' > template.qmd
+---
+title: "Principles of Commercial Law"
+format:
+  lex-quarto-pdf: default
+---
+
+## Offer and Acceptance
+
+In [Carlill v Carbolic Smoke Ball Co 1 QB 256]{.case}, the Court of Appeal held that an advertisement can constitute a unilateral offer to the world.
+
+In Tanzania, contract formation is governed by the [Law of Contract Act, Cap. 345 R.E. 2019]{.statute}.
+
+\begin{casebrief}{Donoghue v Stevenson AC 562}
+\textbf{Facts:} A manufacturer sold ginger beer in an opaque bottle containing a decomposed snail.
+
+\textbf{Held:} A manufacturer owes a duty of care to the ultimate consumer.
+\end{casebrief}
+EOF
+
+# 5. Python CLI Setup
+cat << 'EOF' > cli/pyproject.toml
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "lex-quarto-cli"
+version = "0.1.0"
+description = "Automated Table of Cases and Statutes generator for Quarto legal books"
+readme = "../README.md"
+requires-python = ">=3.9"
+dependencies = []
+
+[project.scripts]
+lex-build-tables = "lex_cli.parser:generate_tables"
+EOF
+
+touch cli/lex_cli/__init__.py
+
+# 6. Python Parser
+cat << 'EOF' > cli/lex_cli/parser.py
+import json
+from pathlib import Path
+
+def generate_tables(json_path="_lex_authorities.json", output_dir="front-matter"):
+    path = Path(json_path)
+    if not path.exists():
+        print("Error: _lex_authorities.json not found. Run 'quarto render' first.")
+        return
+
+    data = json.loads(path.read_text(encoding="utf-8"))
+    unique_cases = sorted(set(data.get("cases", [])), key=lambda x: x.lower())
+    unique_statutes = sorted(set(data.get("statutes", [])), key=lambda x: x.lower())
+
+    out_path = Path(output_dir)
+    out_path.mkdir(parents=True, exist_ok=True)
+
+    toc_lines = ["# Table of Cases {.unnumbered}\n"]
+    for case in unique_cases:
+        toc_lines.append(f"- *{case}*")
+    (out_path / "table-of-cases.qmd").write_text("\n".join(toc_lines), encoding="utf-8")
+
+    tos_lines = ["# Table of Statutes {.unnumbered}\n"]
+    for statute in unique_statutes:
+        tos_lines.append(f"- {statute}")
+    (out_path / "table-of-statutes.qmd").write_text("\n".join(tos_lines), encoding="utf-8")
+
+    print(f"Success: Generated {len(unique_cases)} cases and {len(unique_statutes)} statutes.")
+
+if __name__ == "__main__":
+    generate_tables()
+EOF
+
+# 7. README & License
+cat << 'EOF' > README.md
+# Lex-Quarto
+
+An open-source Quarto extension and CLI tool for writing long-form legal textbooks, automatically formatting citations, and generating Tables of Cases and Statutes.
+
+## Installation
+```bash
+quarto use template YOUR-USERNAME/lex-quarto
+```
+EOF
+
+cat << 'EOF' > LICENSE
+MIT License
+
+Copyright (c) 2026
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files...
+EOF
+
+echo "✅ Done! All files created inside ./lex-quarto"
