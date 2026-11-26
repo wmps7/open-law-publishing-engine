@@ -1,0 +1,8 @@
+chmod +x setup.sh
+./setup.sh
+cd lex-quarto
+git add .
+git commit -m "Initial release: lex-quarto v0.1.0"
+git branch -M main
+git remote add origin https://github.com
+git push -u origin main
