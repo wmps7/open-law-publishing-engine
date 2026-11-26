@@ -1,0 +1,43 @@
+name: Build Single-File Law Book
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+jobs:
+  build-book:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
+
+      - name: Install TinyTeX (for PDF generation)
+        run: quarto install tinytex
+
+      - name: Render Book (HTML, PDF, EPUB)
+        run: |
+          mkdir -p _book
+          quarto render book.qmd --output-dir _book
+          cp _book/book.html _book/index.html
+
+      - name: Upload Book Artifacts (PDF & EPUB)
+        uses: actions/upload-artifact@v4
+        with:
+          name: compiled-law-book
+          path: _book/
+
+      - name: Deploy Web Version to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_book
+          
