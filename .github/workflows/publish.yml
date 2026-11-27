@@ -3,41 +3,52 @@ name: Build Single-File Law Book
 on:
   push:
     branches: [main]
+  pull_request:
   workflow_dispatch:
 
 permissions:
-  contents: write
-  pages: write
-  id-token: write
+  contents: read
 
 jobs:
   build-book:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
+      - name: Test manuscript audit
+        run: python3 -m unittest discover -s tests -v
       - name: Set up Quarto
         uses: quarto-dev/quarto-actions/setup@v2
-
-      - name: Install TinyTeX (for PDF generation)
-        run: quarto install tinytex
-
-      - name: Render Book (HTML, PDF, EPUB)
+        with:
+          tinytex: true
+      - name: Render HTML, PDF and EPUB
         run: |
-          mkdir -p _book
-          quarto render book.qmd --output-dir _book
+          quarto render book.qmd --to all
+          test -s _book/book.html
+          test -s _book/book.pdf
+          test -s _book/book.epub
           cp _book/book.html _book/index.html
-
-      - name: Upload Book Artifacts (PDF & EPUB)
+      - name: Upload verified book outputs
         uses: actions/upload-artifact@v4
         with:
           name: compiled-law-book
           path: _book/
+          if-no-files-found: error
 
-      - name: Deploy Web Version to GitHub Pages
+  publish-web:
+    needs: build-book
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: compiled-law-book
+          path: _book
+      - name: Publish web edition
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./_book
-          
