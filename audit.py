@@ -23,7 +23,7 @@ def audit(path):
             match = re.match(r"^\s*(\d+(?:\.\d+)*)(?:[.)])?\s+", text)
             if match:
                 headings[match.group(1)].append(index)
-        refs.update(n.get(W + "id") for n in paragraph.findall(".//w:footnoteReference", NS))
+        refs.update(n.get(W + "id") for n in paragraph.findall(".//w:footnoteReference", NS) if n.get(W + "id") is not None)
     ids = set() if footnotes is None else {
         n.get(W + "id") for n in footnotes.findall("w:footnote", NS)
     }
@@ -36,4 +36,8 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("document")
     args = parser.parse_args()
-    print(json.dumps(audit(args.document), indent=2))
+    try:
+        report = audit(args.document)
+    except (OSError, KeyError, zipfile.BadZipFile, ET.ParseError) as error:
+        parser.exit(2, f"Unable to read DOCX: {error}\n")
+    print(json.dumps(report, indent=2))
