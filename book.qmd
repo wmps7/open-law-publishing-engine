@@ -1,55 +1,65 @@
 ---
-title: "Principles of Constitutional Law"
-subtitle: "Cases, Statutes, and Commentary"
-author: "Your Name"
-date: today
+title: "Open Law Book Publishing Handbook"
+subtitle: "A practical guide for legal authors and editors"
+author: "Wycliffe Alpha Mponda"
 format:
   html:
     theme: cosmo
     toc: true
-    toc-depth: 3
-    number-sections: true
     embed-resources: true
   pdf:
     documentclass: scrreprt
-    papersize: letter
+    papersize: a4
     toc: true
-    number-sections: true
-    colorlinks: true
   epub:
     toc: true
 ---
 
-# Preface {.unnumbered}
+# Preparing a legal manuscript
 
-Welcome to **Principles of Constitutional Law**. This text provides a structured overview of foundational legal doctrines, statutory frameworks, and landmark judicial decisions.
+Start with an outline and assign a unique number to every chapter and section. Record the jurisdiction and date at which the law has been checked. Keep a separate register of cases, legislation and secondary authorities.
 
----
-
-# Chapter 1: Jurisdiction and Standing
-
-## Constitutional Foundations
-
-To bring a claim before a court, a plaintiff must establish legal standing.^[See *Lujan v. Defenders of Wildlife*, 504 U.S. 555, 560–61 (1992) (establishing the three-part test for standing: injury in fact, causation, and redressability).] Without standing, a court lacks subject-matter jurisdiction to hear the dispute.
-
-::: {.callout-note title="Case Brief: Marbury v. Madison, 5 U.S. (1 Cranch) 137 (1803)"}
-**Facts:** William Marbury petitioned the Supreme Court for a writ of mandamus compelling Secretary of State James Madison to deliver his judicial commission.
-
-**Issue:** Does the Supreme Court have the authority to review acts of Congress and determine whether they are unconstitutional?
-
-**Holding:** Yes. It is emphatically the province and duty of the judicial department to say what the law is.
+::: {.callout-note title="Editorial checkpoint"}
+A citation appearing in a manuscript does not prove its accuracy. Read the underlying judgment, legislation or publication before accepting its proposition.
 :::
 
-## Statutory Interpretation
+# Reviewing authorities
 
-When analyzing a statute, courts rely on established canons of construction:
+For each authority, record the full citation, relevant page or paragraph, proposition supported, source location and verification date. Distinguish binding decisions from persuasive authorities.
 
-1. **Textualism:** Focuses on the ordinary public meaning of the legal text.
-2. **Purposivism:** Examines the broader legislative intent behind the statute.
-3. **Constitutional Avoidance:** Adopts a reasonable construction that avoids constitutional doubts.^[See *Ashwander v. Tennessee Valley Authority*, 297 U.S. 288, 348 (1936).]
+## Case brief template
 
----
+| Field | What to record |
+|---|---|
+| Citation | Court, parties, case number and date |
+| Facts | Material facts relevant to the legal issue |
+| Issue | Question determined by the court |
+| Holding | Decision and applicable legal reasoning |
+| Pinpoint | Page or paragraph supporting the proposition |
 
-# Chapter 2: Separation of Powers
+# Checking Word documents
 
-Start writing your next chapter right here. Just type `# Chapter 3: Title` whenever you want to start a new chapter!
+The included Python utility reads DOCX files locally and reports duplicated typed heading numbers and unresolved footnote references. Run:
+
+```bash
+python audit.py manuscript.docx
+```
+
+The report identifies findings for human review. Automatic heading numbering through Word numbering definitions is not currently analysed.
+
+# Producing an edition
+
+Use Quarto to generate HTML, PDF and EPUB from a single source. Install Quarto and its PDF engine, then run:
+
+```bash
+quarto render book.qmd --to all
+```
+
+Inspect each output before distribution. Check page breaks, footnotes, tables, navigation and accessibility.
+
+# Further reading
+
+The official Quarto project guide explains project configuration and rendering.^[Quarto, Project Basics, https://quarto.org/docs/projects/quarto-projects.html.]
+
+The GitHub Actions workflow in this repository runs tests, checks publication outputs and stores generated artifacts for inspection.
+
