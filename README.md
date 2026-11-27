@@ -2,7 +2,7 @@
 
 An open-source publishing toolkit for legal authors, researchers and editors, with a particular focus on independent legal writing in Tanzania.
 
-[![Build status](https://github.com/wmps7/Law-/actions/workflows/publish.yml/badge.svg)](https://github.com/wmps7/Law-/actions/workflows/publish.yml)
+[![Build status](https://github.com/wmps7/open-law-publishing-engine/actions/workflows/publish.yml/badge.svg)](https://github.com/wmps7/open-law-publishing-engine/actions/workflows/publish.yml)
 
 ## What works today
 
@@ -18,8 +18,8 @@ The project is an early-stage prototype. It does not verify legal authorities, a
 Requires Python 3.10+ for document auditing, and Quarto with TinyTeX for PDF publishing.
 
 ```sh
-git clone https://github.com/wmps7/Law-.git
-cd Law-
+git clone https://github.com/wmps7/open-law-publishing-engine.git
+cd open-law-publishing-engine
 python audit.py manuscript.docx
 python -m unittest discover -s tests -v
 quarto render book.qmd --to all
@@ -47,3 +47,8 @@ Python software is provided under the MIT licence. Other materials retain their 
 - [Quarto project documentation](https://quarto.org/docs/projects/quarto-projects.html)
 - [Quarto publishing documentation](https://quarto.org/docs/publishing/)
 - [GitHub Actions](https://docs.github.com/en/actions)
+
+## Related projects
+
+- [Tanzania Legal Citations](https://github.com/wmps7/tanzania-legal-citations)
+- [Legal Research Register](https://github.com/wmps7/legal-research-register)
